@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.min.js"></script>
+	<script src="./app.js"></script>
+	<link rel="stylesheet" href="./style.css">
+	<title>Chat-Tea</title>
+</head>
+
+<body>
+	<header>
+		<logo>chatTea</logo>
+	</header>
+	<main>
+		<div class="side-menu">
+			<img src="logo.png" alt="Chat-Tea Logo" class="logo">
+			<div class="chat-rooms">
+				<h2>Chat Rooms</h2>
+				<ul>
+					<li>science</li>
+				</ul>
+			</div>
+		</div>
+		<div class="chat-container">
+			<div class="chat-messages" id="messageArea">
+				<!-- Messages will appear here -->
+				<div class="received-message">hello there can you see my message it should be seen from your side
+					<div class="message-time">12:13</div>
+				</div>
+				<div class="sent-message">hello there can you see my message it should be seen from your side
+					<div class="message-time">12:13</div>
+				</div>
+			</div>
+			<div class="chat-input">
+				<textarea id="messageInput" placeholder="Type your message..."></textarea>
+				<button id="sendButton">Send</button>
+			</div>
+		</div>
+	</main>
+	<footer>
+		<p style="text-align: center;position: relative; ">&copy; 2025 Chat-Tea. All rights reserved.</p>
+	</footer>
+</body>
+</body>
+
+</html>
