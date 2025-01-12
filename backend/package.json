@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "a simple chat app backend application",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "lint": "./node_modules/.bin/eslint",
     "check-lint": "lint [0-9]*.js",
@@ -25,6 +25,7 @@
   "dependencies": {
     "body-parser": "^1.20.3",
     "express": "^4.21.2",
+    "moment": "^2.30.1",
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
