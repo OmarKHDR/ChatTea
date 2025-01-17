@@ -5,8 +5,7 @@ const router = Router();
 
 router.post('/submit-login', userController.checkUser, userController.login)
 
-router.get('/login', userController.isAuthenticated, (req, res)=> { res.sendFile('login.html', {'root': '../frontend'}); });
+router.get('/login', userController.isAuthenticated,(req, res)=> { res.sendFile('login.html', {'root': '../frontend'}); });
 router.get('/home', userController.isAuthenticated, (req, res) => { res.sendFile('index.html', {'root': '../frontend'}); });
-
-
+router.get('/username', userController.getUserName)
 export default router;

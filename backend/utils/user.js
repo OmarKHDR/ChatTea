@@ -62,6 +62,25 @@ class UserManager {
     }
   }
 
+  async addDataToUser(username, key, value) {
+	try {
+	  if (!userId || !key || value == null) {
+		throw new Error('Invalid Input: userId, key and value are required.');
+	  }
+	  const filter = { username };
+	  const update = { $set: { [key]: value } }; // Dynamically creates { "key": value }
+	  const result =  await this.usersCollection.updateOne(filter, update);
+	  if (result.matchedCount === 0) {
+		throw new Error('User not found for the provided user id');
+	   }
+		return { message: 'User data updated successfully' };
+	  }
+	 catch(error) {
+	   console.error('Error adding data to user:', error);
+	  throw error;
+	 }
+ }
+
   async findUser(username) {
     try {
       return await this.usersCollection.findOne({ username });
@@ -104,6 +123,19 @@ class UserManager {
     }
   }
 
+
+	static async getUserName(key, value) {
+		try {
+            const user = await this.usersCollection.findOne({ key: value});
+		if(!user) {
+			throw new Error('User not found');
+		}
+		return user.username;
+        } catch (error) {
+			console.error('Error getting user ID:', error);
+            throw error;
+		}
+	}
 }
 
 const userManage = new UserManager()

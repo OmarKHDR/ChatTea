@@ -24,7 +24,7 @@ app.use(session({
 	saveUninitialized: false, // Only save session if modified
 	 cookie: {
 		   secure: false, // Set to true in production with https
-		   httpOnly: true, // Helps prevent client-side JS from accessing the cookie
+		   httpOnly: false, // Helps prevent client-side JS from accessing the cookie
 		   maxAge: 1000 * 60 * 60 * 24 // Session expiration time (1 day)
 	   },
   }));
@@ -37,12 +37,16 @@ const io = new Server(httpServer, { cors: { origin: "*" } })
 io.on('connection', soc => {
 	console.log('user:', soc.id, 'connected')
 
-	soc.broadcast.emit('announcement', 'new user entered');
+	soc.on('username', (name) => {
+		soc.username = name;
+		io.emit('announcement', `user ${soc.username} has joined the room`)
+	})
+
 	soc.on('message', message => {
-		soc.broadcast.emit('message', message)
+		soc.broadcast.emit('message', JSON.stringify({message, username: soc.username}))
 	})
 	io.on('diconnect', () => {
-		soc.broadcast.emit('announcement', 'a user has left')
+		io.emit('announcement', soc.username + 'has left')
 	})
 })
 

@@ -7,13 +7,22 @@ body {
 
 logo {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
+	text-align: center;
+}
+.username {
+	color: white;
+	font-weight: bold;
+	font-size: 16px;
+	display: inline-block;
+	margin-right: 15px;
+	vertical-align: middle;
 }
 header {
     background-color: #8B4513;
     color: white;
     padding: 10px;
-    text-align: center;
+	height: 25px;
+	vertical-align: middle;
 }
 
 .side-menu {
