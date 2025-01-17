@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import {v4} from 'uuid'
 import session from 'express-session'
 import router from './routes/index.js'
+import userController from "./controllers/userController.js";
 
 const port = env.SOCKETPORT || 5000;
 const host = env.SOCKETHOST || '0.0.0.0';
@@ -30,9 +31,6 @@ app.use(session({
 
 app.use(express.static('../frontend'))
 app.use(router);
-
-app.get('/login', (req, res)=> { res.sendFile('login.html', {'root': '../frontend'}); });
-app.get('/home', (req, res) => { res.sendFile('index.html', {'root': '../frontend'}); });
 
 const io = new Server(httpServer, { cors: { origin: "*" } })
 

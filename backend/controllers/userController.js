@@ -23,4 +23,12 @@ export default class userController {
 			res.redirect('/home')
 		}
 	}
+
+	static isAuthenticated(req, res, next) {
+		if (req.session && req.session.user) {
+			next();
+		} else {
+			res.redirect('/login');
+		}
+	}
 }
