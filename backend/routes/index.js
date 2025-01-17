@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { appendFile } from "fs";
+import userController from "../controllers/userController.js";
 
-const routes = Router();
+const router = Router();
 
-routes.post('/submit-login', )
+router.post('/submit-login', userController.checkUser)
+
+export default router;

@@ -106,5 +106,6 @@ class UserManager {
 
 }
 
-
-module.exports = UserManager;
+const userManage = new UserManager()
+userManage.connect()
+export default userManage

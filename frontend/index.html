@@ -4,8 +4,6 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.min.js"></script>
-	<script src="./app.js" defer></script>
 	<link rel="stylesheet" href="./style.css">
 	<title>Chat-Tea</title>
 </head>
@@ -27,12 +25,7 @@
 		<div class="chat-container">
 			<div class="chat-messages" id="messageArea">
 				<!-- Messages will appear here -->
-				<div class="received-message">hello there can you see my message it should be seen from your side
-					<div class="message-time">12:13</div>
-				</div>
-				<div class="sent-message">hello there can you see my message it should be seen from your side
-					<div class="message-time">12:13</div>
-				</div>
+
 			</div>
 			<div class="chat-input">
 				<textarea id="messageInput" placeholder="Type your message..."></textarea>
@@ -43,7 +36,8 @@
 	<footer>
 		<p style="text-align: center;position: relative; ">&copy; 2025 Chat-Tea. All rights reserved.</p>
 	</footer>
-</body>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="./app/homeApp.js" defer></script>
 </body>
 
 </html>
