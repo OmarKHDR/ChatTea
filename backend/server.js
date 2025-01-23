@@ -6,7 +6,6 @@ import bodyParser from 'body-parser';
 import {v4} from 'uuid'
 import session from 'express-session'
 import router from './routes/index.js'
-import userController from "./controllers/userController.js";
 
 const port = env.SOCKETPORT || 5000;
 const host = env.SOCKETHOST || '0.0.0.0';
@@ -21,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
 	secret: env.SECRETKEY, // Change this to a secure secret
 	resave: false,
-	saveUninitialized: false, // Only save session if modified
+	saveUninitialized: true, // Only save session if modified
 	 cookie: {
 		   secure: false, // Set to true in production with https
 		   httpOnly: false, // Helps prevent client-side JS from accessing the cookie

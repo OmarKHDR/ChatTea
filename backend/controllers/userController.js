@@ -1,5 +1,7 @@
 import userManage from '../utils/user.js';
 
+const noNeedAuth = ['/login','/signup', '/login/', '/signup/']
+
 export default class userController {
 	static async checkUser(req, res, next){
 		console.log('trying to log in')
@@ -8,11 +10,11 @@ export default class userController {
 		console.log(user, password);
 		try{
 			const status = await userManage.checkPassword(user, password)
-			console.log(status)
-			if(status === false){
+			if(status === true){
 				req.session.user = { username: user };
 				next();
 			}
+			res.redirect('/login')
 		} catch (err) {
 			console.log(err);
 		}
@@ -33,34 +35,18 @@ export default class userController {
 
 	static isAuthenticated(req, res, next) {
 		if (req.session && req.session.user) {
-			if (req.path === '/login') {
-				 return res.redirect('/home'); // return to avoid calling next
+			if (noNeedAuth.includes(req.path)) {
+				return res.redirect('/home'); // return to avoid calling next
 			}
 			next();
 		} else {
-			if (req.path !== '/login') {
-				 req.session.redirectTo = req.originalUrl; // Store the original url so we can redirect after login.
-				return res.redirect('/login'); // return to avoid calling next
+			if (!noNeedAuth.includes(req.path)) {
+				req.session.redirectTo = req.originalUrl; // Store the original url so we can redirect after login.
+				res.redirect('/login'); // return to avoid calling next
 			}
 			next();
 		}
 	}
 
-	static async setNameBySocId(id, username) {
-		try {
-			const _id = await userManage.getUserId(username);
-			await userManage.addDataToUser(_id, 'socId', id);
-		} catch (err) {
-			console.log(err);
-		}
-	}
 
-	static async getNameBySocId(id) {
-		try {
-			const name = await userManage.getUserName('socId', id);
-			return name;
-		} catch (err) {
-			console.log(err)
-		}
-	}
 }
