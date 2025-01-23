@@ -20,12 +20,26 @@ export default class userController {
 		}
 	}
 
-	static login(req, res) {
-		if (req.session.user) {
-			res.redirect('/home')
+	static async checkUserData(req, res, next) {
+		const user = req.body
+		if(!(user && user.username && user.password && user.confirmPassword && user.email)) {
+			res.send({error: "no sufficient data"})
+		} else {
+			if (user.checkPassword === user.password){
+				userManage.addUser(user.username, user.password, user.email)
+				next();
+			}
+			res.send({error: "passwords doesn't match stop bypassing front-end you idiot"})
 		}
 	}
 
+	static login(req, res) {
+		if (req.session.user) {
+			res.redirect('/home')
+		} else {
+			res.redirect('/login')
+		}
+	}
 
 	static getUserName (req, res){
 		if(req.session && req.session.user) {

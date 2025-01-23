@@ -2,6 +2,7 @@ import { MongoClient } from 'mongodb';
 import pkg from 'bcryptjs';
 import readFileSync from 'fs';
 import { NONE } from 'redis-client';
+import { error } from 'console';
 
 const {hash, compare} = pkg;
 
@@ -42,8 +43,11 @@ class UserManager {
     }
   }
     
-  async addUser(username, password, socId = null, picture = '../profilePics/profile.webp') {
+  async addUser(username, password, email, socId = null, picture = '../profilePics/profile.webp') {
     try {
+      if (username === undefined || password === undefined || email === undefined) {
+        throw new error('paramaters not enough');
+      }
       const existingUser = await this.usersCollection.findOne({ username });
       if (existingUser) {
         throw new Error('Username already exists.');
@@ -54,6 +58,7 @@ class UserManager {
         password: hashedPassword,
         socId,
         picture,
+        email,
       };
 
       const result = await this.usersCollection.insertOne(newUser);
