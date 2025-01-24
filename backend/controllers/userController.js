@@ -13,10 +13,17 @@ export default class userController {
 			if(status === true){
 				req.session.user = { username: user };
 				next();
+				return
 			}
-			res.redirect('/login')
+			return res.redirect('/login')
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	static signup(req, res) {
+		if (req.session && req.session.user) {
+			return res.redirect('/home')
 		}
 	}
 
@@ -25,19 +32,29 @@ export default class userController {
 		if(!(user && user.username && user.password && user.confirmPassword && user.email)) {
 			res.send({error: "no sufficient data"})
 		} else {
-			if (user.checkPassword === user.password){
-				userManage.addUser(user.username, user.password, user.email)
+			if (user.confirmPassword === user.password){
+				try{
+					await userManage.addUser(user.username, user.password, user.email)
+				} catch(err) {
+					console.log(err)
+					res.send({error: err})
+					return
+				}
+				req.session.user = {username: user.username}
 				next();
+			} else {
+				return res.send({error: "passwords doesn't match stop bypassing front-end you idiot"})
 			}
-			res.send({error: "passwords doesn't match stop bypassing front-end you idiot"})
 		}
 	}
 
 	static login(req, res) {
 		if (req.session.user) {
 			res.redirect('/home')
+			return
 		} else {
 			res.redirect('/login')
+			return
 		}
 	}
 
@@ -56,11 +73,10 @@ export default class userController {
 		} else {
 			if (!noNeedAuth.includes(req.path)) {
 				req.session.redirectTo = req.originalUrl; // Store the original url so we can redirect after login.
-				res.redirect('/login'); // return to avoid calling next
+				return res.redirect('/login'); // return to avoid calling next
 			}
 			next();
 		}
 	}
-
 
 }

@@ -14,13 +14,14 @@
 <body>
 	<div class="login-container">
 		<h2>Login to Chat-Tea</h2>
-		<form action="http://127.0.0.1:5000/submit-login" method="POST">
+		<form action="http://127.0.0.1:5000/api/user/submit-login" method="POST">
 			<label for="username">Username:</label>
 			<input type="text" id="username" name="username" required>
 
 			<label for="password">Password:</label>
 			<input type="password" id="password" name="password" required>
 			<dev class="toggle-password">Show</dev>
+			<div id="loginError"></div>
 			<button type="submit" class="submit">Login</button>
 		</form>
 		<p>don't have an account? <a href="signup.html">signup now</a></p>

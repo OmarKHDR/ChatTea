@@ -28,8 +28,8 @@ app.use(session({
 	   },
   }));
 
-app.use(express.static('../frontend'))
 app.use(router);
+app.use(express.static('../frontend'))
 
 const io = new Server(httpServer, { cors: { origin: "*" } })
 

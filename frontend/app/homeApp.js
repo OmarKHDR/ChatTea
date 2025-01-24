@@ -4,7 +4,7 @@ const socket = io();
 const header = document.querySelector('header')
 let userName;
 
-fetch('/username')
+fetch('/api/user/username')
 .then(res => res.json())
 .then(res => {
 	userName = res.username;
