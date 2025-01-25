@@ -32,4 +32,15 @@ export default class roomController{
 		console.log(rooms)
 		res.send(rooms)
 	}
+
+	static setRoom(req, res) {
+		console.log('session room ->', req.query.roomName)
+		if(req.session && req.session.user && req.query.roomName){
+			req.session.room = {roomName: req.query.roomName}
+			return res.send({status:"success"})
+		} else {
+			console.log('no sufficient data')
+			return res.status(400).json({status:"failed"})
+		}
+	}
 }

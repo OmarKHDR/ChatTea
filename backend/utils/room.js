@@ -16,7 +16,8 @@ class roomManager {
 			this.db = await this.client.db(this.dbName);
 			// search for room collection
 			const collections = await this.db.listCollections().toArray();
-			if(!collections.includes('Rooms')) {
+			const exists = collections.some(collection => collection.name === 'Users');
+			if(!exists) {
 				await this.db.createCollection('Rooms');
 			}
 			this.roomsCollection = this.db.collection('Rooms');

@@ -51,8 +51,8 @@ io.on('connection', soc => {
 		soc.currentRoom = roomName;
 		soc.join(soc.currentRoom);
 		io.to(soc.currentRoom).emit('announcement', `user ${soc.username} has joined the room`)
-		soc.on('message', message => {
-			console.log('message sent to', soc.currentRoom)
+		soc.on('message', (message, time) => {
+			console.log('message sent to', soc.currentRoom);
 			soc.broadcast.to(soc.currentRoom).emit('message', JSON.stringify({message, username: soc.username}))
 		})
 	})

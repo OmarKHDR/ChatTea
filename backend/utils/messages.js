@@ -1,8 +1,8 @@
 import { MongoClient,  ObjectId} from "mongodb";
 
 class messageManager{
-	constructor(dburl="mongodb://127.0.0.1:57017", dbName="chaiApp") {
-		this.dbUrl = dbUrl;
+	constructor(dburl="mongodb://127.0.0.1:27017", dbName="chaiApp") {
+		this.dbUrl = dburl;
 		this.dbName = dbName;
 		this.client = null;
 		this.db = null;
@@ -11,10 +11,11 @@ class messageManager{
 
 	async connect(){
 		try {
-			this.client = await MongoClient(this.dbUrl);
+			this.client = await new MongoClient(this.dbUrl);
 			this.db = await this.client.db(this.dbName);
-			const isExist = await this.db.listCollections().toArray().contains('Messages');
-			if(!isExist) {
+			const collections = await this.db.listCollections().toArray();
+			const exists = collections.some(collection => collection.name === 'Users');
+			if(!exists) {
 				await this.db.createCollection('Messages')
 			}
 			this.messagesCollection = await this.db.collection('Messages')
@@ -24,7 +25,7 @@ class messageManager{
 		}
 	}
 
-	async addMessages(roomName, userName, message, timeCreated){
+	async addMessage(roomName, userName, message, timeCreated){
 		try {
 			if (!this.messagesCollection) {
 				await this.connect();
@@ -98,7 +99,7 @@ class messageManager{
 		}
 	}
 
-	static async getRoomMessages(roomName) {
+	async getRoomMessages(roomName) {
 		try {
 			if (!this.messagesCollection) {
 				await this.connect();
@@ -107,15 +108,29 @@ class messageManager{
 					throw new Error('faild to get messages from room');
 				}
 			}
-			this.messagesCollection.find({roomName})
+			const mess = await this.messagesCollection.find({roomName}).toArray();
+			return mess;
 		} catch (err) {
 			console.log('error getting room messages');
 			throw err;
 		}
 	}
 
-	static async getMessageById(userName, roomName) {
-		
+	async getMessageById(messageId) {
+		try {
+			if (!this.messagesCollection) {
+				await this.connect();
+				if(!this.messagesCollection) {
+					console.log('couldnt connect to messages collection')
+					throw new Error('faild to get messages from room');
+				}
+			}
+			const mess = await this.messagesCollection.findOne({_id: new ObjectId(messageId)})
+			return mess;
+		} catch (err) {
+			console.log('error getting room messages');
+			throw err;
+		}
 	} 
 }
 
