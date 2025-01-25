@@ -34,18 +34,34 @@ app.use(express.static('../frontend'))
 const io = new Server(httpServer, { cors: { origin: "*" } })
 
 io.on('connection', soc => {
-	console.log('user:', soc.id, 'connected')
-
 	soc.on('username', (name) => {
 		soc.username = name;
-		io.emit('announcement', `user ${soc.username} has joined the room`)
 	})
-
-	soc.on('message', message => {
-		soc.broadcast.emit('message', JSON.stringify({message, username: soc.username}))
+	console.log('user:', soc.id, 'connected')
+	soc.on('joinRoom', roomName => {
+		if (!soc.username) {
+			console.log('username not recieved yet, trying to reconnect....')
+			soc.emit("rejoin", {status: "failed to join room"})
+			return;
+		}
+		if(soc.currentRoom) {
+			soc.leave(soc.currentRoom);
+			io.to(soc.currentRoom).emit('announcement', soc.username + ' has left the room');
+		}
+		soc.currentRoom = roomName;
+		soc.join(soc.currentRoom);
+		io.to(soc.currentRoom).emit('announcement', `user ${soc.username} has joined the room`)
+		soc.on('message', message => {
+			console.log('message sent to', soc.currentRoom)
+			soc.broadcast.to(soc.currentRoom).emit('message', JSON.stringify({message, username: soc.username}))
+		})
 	})
-	io.on('diconnect', () => {
-		io.emit('announcement', soc.username + 'has left')
+	soc.on('disconnect', () => {
+		console.log(soc.username, "left", soc.currentRoom)
+		if(soc.currentRoom) {
+			io.to(soc.currentRoom).emit('announcement', soc.username + ' has left the room');
+			soc.currentRoom = null;
+		}
 	})
 })
 

@@ -17,7 +17,7 @@ class roomManager {
 			// search for room collection
 			const collections = await this.db.listCollections().toArray();
 			if(!collections.includes('Rooms')) {
-				this.db.createCollection('Rooms');
+				await this.db.createCollection('Rooms');
 			}
 			this.roomsCollection = this.db.collection('Rooms');
 		} catch(err) {

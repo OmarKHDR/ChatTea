@@ -15,6 +15,7 @@ router.get('/api/room/list-rooms/', roomController.listRooms)
 // router.get('/api/room/add-member/', roomController.addMember)
 // router.get('/api/room/add-admin/', roomController.addAdmin)
 // router.get('/getImage', userController.getImage);
+
 router.get('/login', userController.isAuthenticated,(req, res)=> { res.sendFile('login.html', {'root': '../frontend'}); });
 router.get('/signup', userController.isAuthenticated,(req, res)=> { res.sendFile('signup.html', {'root': '../frontend'}); });
 router.get('/home', userController.isAuthenticated, (req, res) => { res.sendFile('index.html', {'root': '../frontend'}); });

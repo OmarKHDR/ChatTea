@@ -46,15 +46,26 @@ header {
 .chat-rooms ul {
     list-style-type: none;
     padding: 0;
+	background-color:#A0522D;
 }
 
 .chat-rooms ul li {
     padding: 10px;
+	margin-bottom:8px ;
     cursor: pointer;
+	background-color: #8B4513;
+	border:2px solid #DEB887;
+
+}
+
+.chat-rooms ul .clicked {
+	border:5px solid #DEB887;
+	box-shadow: 5px 5px 5px black;
 }
 
 .chat-rooms ul li:hover {
-    background-color: #8B4513;
+    background-color: #A0522D;
+
 }
 
 .chat-container {
