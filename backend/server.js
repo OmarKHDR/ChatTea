@@ -21,12 +21,12 @@ app.use(session({
 	secret: env.SECRETKEY, // Change this to a secure secret
 	resave: false,
 	saveUninitialized: true, // Only save session if modified
-	 cookie: {
+	cookie: {
 		   secure: false, // Set to true in production with https
 		   httpOnly: false, // Helps prevent client-side JS from accessing the cookie
 		   maxAge: 1000 * 60 * 60 * 24 // Session expiration time (1 day)
-	   },
-  }));
+		},
+}));
 
 app.use(router);
 app.use(express.static('../frontend'))
