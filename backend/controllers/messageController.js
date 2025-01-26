@@ -25,12 +25,13 @@ export default class messageController {
 		try {
 			const room = req.session.room.roomName;
 			const username = req.session.user.username;
-			const admins = roomManage.listAdmins(room);
+			const admins = await roomManage.listAdmins(room);
 			console.log(admins);
 			if(admins.includes(username)) {
 				await messageManage.deleteAllRoomMessages(room);
+				res.status(200).json({status: 1, reason:"successfull deletion"})
 			} else {
-				res.status(401).json({status: "failed", reason: "you are not an admin of this room"})
+				res.status(401).json({status: 0, reason: "you are not an admin of this room"})
 			}
 		} catch (err) {
 			console.log("can't delete messages", err)
@@ -55,7 +56,7 @@ export default class messageController {
 	}
 	static async isAuthenticated(req, res, next) {
 		if (req.session && req.session.user && req.session.room) {
-			console.log('authenticated to access messages', req.session)
+			console.log('authenticated to access messages')
 			next();
 		}
 		else {

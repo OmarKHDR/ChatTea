@@ -25,7 +25,7 @@ router.get('/api/room/room-session/', roomController.setRoom)
 //message related endpoints
 router.get('/api/message/all-messages/', messageController.isAuthenticated, messageController.getAllMessages)
 router.post('/api/message/add-message/', messageController.isAuthenticated, messageController.addMessage)
-router.post('/api/message/delet-messages/', messageController.isAuthenticated, messageController.deleteRoomMessages)
+router.get('/api/message/delete-messages/', messageController.isAuthenticated, messageController.deleteRoomMessages)
 
 
 router.get('/login', userController.isAuthenticated,(req, res)=> { res.sendFile('login.html', {'root': '../frontend'}); });

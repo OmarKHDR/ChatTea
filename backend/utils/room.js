@@ -148,9 +148,11 @@ class roomManager {
 			const updateResult = await this.roomsCollection.updateOne(filter, update);
 			
 			if (updateResult.modifiedCount > 0) {
+				console.log(updateResult)
 				console.log('Successfully removed user from admins')
 				return {status: 'success'}
 			} else if (updateResult.matchedCount > 0) {
+				console.log(updateResult)
 				console.log('User doesnt exist in room admins')
 			} else {
 				console.log('Failed to remove admin. Room not found.');
@@ -171,7 +173,7 @@ class roomManager {
 				}
 			}
 			const room = await this.roomsCollection.findOne({roomName});
-			return room.admin;
+			return room.admins;
 		} catch (err) {
 			console.log('Error listing admins:', err);
 			throw err;

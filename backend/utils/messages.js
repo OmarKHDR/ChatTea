@@ -113,7 +113,7 @@ class messageManager{
 				throw new Error("room name wasn't provided")
 			}
 			const mess = await this.messagesCollection.deleteMany({roomName});
-			return mess;
+			console.log(`Deleted ${mess.deletedCount} messages`);
 		} catch (err) {
 			console.log('error getting room messages');
 			throw err;

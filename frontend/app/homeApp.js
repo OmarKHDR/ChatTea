@@ -3,6 +3,8 @@ const chat = document.getElementById('messageArea')
 const socket = io();
 const header = document.querySelector('header')
 const rooms = document.getElementById('rooms')
+const deleteChat = document.getElementById('deleteChat');
+
 let userName;
 let roomName;
 fetch('/api/user/username')
@@ -33,7 +35,7 @@ fetch('/api/room/list-rooms')
 		if(room.roomName === 'general') {
 			roomName = 'general'
 			child.classList.add('clicked');
-			socket.emit('joinRoom', room.roomName);
+			socket.emit('joinRoom', 'general');
 		}
 		rooms.appendChild(child);
 	});
@@ -56,10 +58,25 @@ rooms.addEventListener
 		const allRooms = rooms.querySelectorAll('li');
 		allRooms.forEach(room => room.classList.remove('clicked'));
 		e.target.classList.add('clicked');
-		fetch(`/api/room/remove-member?roomName=${roomName}`);
-		roomName = e.target.textContent;
-		console.log(roomName)
-		socket.emit('joinRoom');
+		fetch(`/api/room/remove-member?roomName=${roomName}`).then(_=> {
+			roomName = e.target.textContent;
+			fetch(`/api/room/room-session?roomName=${roomName}`).then(_=>{
+				console.log(roomName, "has been joined and session were updated")
+				socket.emit('joinRoom', roomName);
+			})
+		})
+	}
+})
+
+socket.on('rejoin', () =>{
+	socket.emit('username', userName);
+	socket.emit('joinRoom', roomName);
+
+})
+
+socket.on('joined', (room)=>{
+	console.log(room, roomName, "this is insane")
+	if (room === roomName) {
 		fetch('/api/room/add-member/')
 		.then(_ => {
 			getMembers();
@@ -67,12 +84,6 @@ rooms.addEventListener
 			getRoomMessages() 
 		})
 	}
-})
-
-socket.on('rejoin', () =>{
-	socket.emit('username', userName);
-	socket.emit('joinRoom');
-
 })
 
 
@@ -143,6 +154,7 @@ function getRoomMessages() {
 	fetch('/api/message/all-messages/')
 	.then(res => res.json())
 	.then(messages => {
+		console.log(messages)
 		chat.innerHTML = '';
 		messages.forEach(msg => {
 			const messageClass = msg.userName === userName ? 'sent-message' : 'received-message';
@@ -181,3 +193,15 @@ function getAdmins() {
 		});
 	});
 }
+
+deleteChat.addEventListener('click', async ()=>{
+	const res = await fetch("/api/message/delete-messages/")
+	console.log("reloading messages after deleting", res)
+	if(res.status === 401) {
+		alert("you are not an admin, you can't delete room messages")
+	} else if (res.status === 500) {
+		alert("a problem happend while deleting check the logs")
+	} else {
+		getRoomMessages();
+	}
+})
