@@ -214,6 +214,8 @@ class roomManager {
 
 }
 
-const roomManage = new roomManager()
+import env from 'process'
+
+const roomManage = new roomManager(env.MONGO_URI || 'mongodb://127.0.0.1:27017')
 roomManage.connect()
 export default roomManage;

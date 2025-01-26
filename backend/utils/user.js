@@ -135,6 +135,7 @@ class UserManager {
   }
 }
 
-const userManage = new UserManager()
+import env from 'process';
+const userManage = new UserManager(env.MONGO_URI || 'mongodb://127.0.0.1:27017')
 userManage.connect()
 export default userManage

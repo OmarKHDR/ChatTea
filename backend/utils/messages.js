@@ -154,7 +154,9 @@ class messageManager{
 	} 
 }
 
-const messageManage = new messageManager();
+import env from 'process'
+
+const messageManage = new messageManager(env.MONGO_URI || 'mongodb://127.0.0.1:27017');
 messageManage.connect();
 
 export default messageManage;

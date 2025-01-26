@@ -39,66 +39,38 @@ To run ChatTea locally, follow these steps:
     Navigate to both the `client` and `server` folders and install dependencies using npm.
 
     ```bash
-      cd client
+      cd backend
       npm install
     ```
 
-    ```bash
-        cd ../server
-        npm install
-    ```
 
 3.  **Set Up MongoDB:**
     -   Make sure you have MongoDB installed and running.
-    -   Create a `.env` file inside the `server` folder and add the following, filling with your database URI:
+    -   if not the local default uri for mongodb Create a `.env` file inside the `backend` folder and add the following, filling with your database URI:
 
         ```
         MONGO_URI=your_mongodb_connection_string
         ```
 
 4.  **Start the Server:**
-    Navigate to the `server` folder and start the server:
+    Navigate to the `backend` folder and start the server:
 
     ```bash
        npm run dev
     ```
 
-    This will start the server on port 3000 (default), and the client will be served on port 8080
+    This will start the server on port 5000 (default),
 
 5.  **Start the Client:**
-    Navigate to the `client` folder and start the client:
+    Navigate to the `backend` folder and start the client:
 
     ```bash
        npm run dev
     ```
 
 6.  **Open in Browser:**
-    Open your web browser and go to `http://localhost:8080` to view the application.
+    Open your web browser and go to `http://localhost:5000` to view the application.
 
-## Project Structure
-```
-ChatTea/
-├── client/ # Client-side code (React app)
-│ ├── public/
-│ ├── src/
-│ ├── components/
-│ ├── pages/
-│ ├── App.jsx
-│ ├── main.jsx
-│ ├── index.css
-│ └──...
-│ ├── package.json
-│ └── ...
-├── server/ # Server-side code (Node.js)
-│ ├── routes/ # Contains API routes and route handlers
-│ ├── models/
-│ ├── utils/
-│ ├── index.js # Entry point of the server
-│ ├── package.json
-│ └── ...
-├── README.md # This file
-└── ...
-```
 
 
 ## API Endpoints
@@ -142,4 +114,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
-[Omar KHDR](https://github.com/OmarKHDR)
+[OmarKHDR](https://github.com/OmarKHDR)
