@@ -33,6 +33,70 @@ export default class roomController{
 		res.send(rooms)
 	}
 
+	static async listAdmins(req, res) {
+		if(req.session.room && req.session.room.roomName ) {
+			const admins = await roomManage.listAdmins(req.session.room.roomName)
+			console.log(admins)
+			res.status(200).json(admins)
+		}
+	}
+
+	static async listMembers(req, res) {
+		if(req.session.room && req.session.room.roomName ) {
+			const members = await roomManage.listMembers(req.session.room.roomName)
+			console.log(members)
+			res.send(members)
+		}
+	}
+
+	static async addAdmin(req,res) {
+		if (req.body && req.body.username && req.body.roomName){
+			try{
+				roomManage.addAdmin(req.body.username, req.body.roomName);
+				res.status(200).json({status:"success"});
+			} catch (err) {
+				console.log("error adding admin", err);
+				res.status(500).json({status:"failed"})
+			}
+		}
+	}
+
+	static async removeAdmin(req,res) {
+		if (req.body && req.body.username && req.body.roomName){
+			try{
+				roomManage.removeAdmin(req.body.username, req.body.roomName);
+				res.status(200).json({status:"success"});
+			} catch (err) {
+				console.log("error adding admin", err);
+				res.status(500).json({status:"failed"})
+			}
+		}
+	}
+
+	static async addMember(req,res) {
+		if (req.body && req.session.user && req.session.room){
+			try{
+				roomManage.addMember(req.session.user.username, req.session.room.roomName);
+				res.status(200).json({status:"success"});
+			} catch (err) {
+				console.log("error adding member", err);
+				res.status(500).json({status:"failed"})
+			}
+		}
+	}
+
+	static async removeMember(req,res) {
+		if (req.body && req.session.user && req.query.roomName){
+			try{
+				roomManage.removeMember(req.session.user.username, req.session.room.roomName);
+				res.status(200).json({status:"success"});
+			} catch (err) {
+				console.log("error removing member", err);
+				res.status(500).json({status:"failed"})
+			}
+		}
+	}
+
 	static setRoom(req, res) {
 		console.log('session room ->', req.query.roomName)
 		if(req.session && req.session.user && req.query.roomName){

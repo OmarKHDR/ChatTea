@@ -215,3 +215,21 @@ button:hover {
 .chat-messages .received-message .message-time {
 	color: rgba(255, 255, 255, 0.8);
 }
+
+#deleteChat {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #8B4513;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	border: 1px solid #DEB887;
+	cursor: pointer;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#deleteChat:hover {
+	background-color: #A0522D;
+	box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+}

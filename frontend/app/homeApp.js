@@ -39,7 +39,13 @@ fetch('/api/room/list-rooms')
 	});
 })
 
-fetch(`/api/room/room-session?roomName=general`).then(_=>{
+fetch(`/api/room/room-session?roomName=general`)
+.then(_=>{
+	fetch('/api/room/add-member/');
+})
+.then(_=>{
+	getMembers();
+	getAdmins();
 	getRoomMessages(roomName);
 })
 
@@ -50,10 +56,15 @@ rooms.addEventListener
 		const allRooms = rooms.querySelectorAll('li');
 		allRooms.forEach(room => room.classList.remove('clicked'));
 		e.target.classList.add('clicked');
+		fetch(`/api/room/remove-member?roomName=${roomName}`);
 		roomName = e.target.textContent;
+		console.log(roomName)
 		socket.emit('joinRoom');
-		fetch(`/api/room/room-session?roomName=${roomName}`).then( _ => {
-			getRoomMessages(roomName);
+		fetch('/api/room/add-member/')
+		.then(_ => {
+			getMembers();
+			getAdmins();
+			getRoomMessages() 
 		})
 	}
 })
@@ -138,6 +149,35 @@ function getRoomMessages() {
 			const displayName = msg.userName === userName ? 'me' : msg.userName;
 			const messageElement = createMessageElement(msg.message, messageClass, displayName, msg.timeCreated, msg.timeUpdated);
 			chat.appendChild(messageElement);
+		});
+	});
+}
+
+function getMembers() {
+	fetch('/api/room/list-members/')
+	.then(res => res.json())
+	.then(members => {
+		const membersList = document.getElementById('members');
+		membersList.innerHTML = '';
+		members.forEach(member => {
+			const li = document.createElement('li');
+			li.textContent = member;
+			membersList.appendChild(li);
+		});
+	});
+}
+
+function getAdmins() {
+	fetch('/api/room/list-admins/')
+	.then(res => res.json())
+	.then(admins => {
+		console.log(admins)
+		const adminsList = document.getElementById('admins');
+		adminsList.innerHTML = '';
+		admins.forEach(admin => {
+			const li = document.createElement('li');
+			li.textContent = admin;
+			adminsList.appendChild(li);
 		});
 	});
 }

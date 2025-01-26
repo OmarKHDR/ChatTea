@@ -99,6 +99,26 @@ class messageManager{
 		}
 	}
 
+	async deleteAllRoomMessages(roomName) {
+		try {
+			if (!this.messagesCollection) {
+				await this.connect();
+				if(!this.messagesCollection) {
+					console.log('couldnt connect to messages collection')
+					throw new Error('faild to get messages from room');
+				}
+			}
+			if (!roomName) {
+				console.log("no room name provided")
+				throw new Error("room name wasn't provided")
+			}
+			const mess = await this.messagesCollection.deleteMany({roomName});
+			return mess;
+		} catch (err) {
+			console.log('error getting room messages');
+			throw err;
+		}
+	}
 	async getRoomMessages(roomName) {
 		try {
 			if (!this.messagesCollection) {

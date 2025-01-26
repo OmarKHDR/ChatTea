@@ -1,4 +1,5 @@
 import messageManage from "../utils/messages.js";
+import roomManage from "../utils/room.js";
 
 export default class messageController {
 	static async addMessage(req, res) {
@@ -17,6 +18,23 @@ export default class messageController {
 		} catch (err) {
 			console.log('error creating new message in db', err)
 			return res.status(500).json({status: "failed"})
+		}
+	}
+
+	static async deleteRoomMessages(req, res) {
+		try {
+			const room = req.session.room.roomName;
+			const username = req.session.user.username;
+			const admins = roomManage.listAdmins(room);
+			console.log(admins);
+			if(admins.includes(username)) {
+				await messageManage.deleteAllRoomMessages(room);
+			} else {
+				res.status(401).json({status: "failed", reason: "you are not an admin of this room"})
+			}
+		} catch (err) {
+			console.log("can't delete messages", err)
+			res.status(500).json({status:"failed", reason:"check logs"})
 		}
 	}
 

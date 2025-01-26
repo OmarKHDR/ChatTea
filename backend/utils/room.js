@@ -56,8 +56,142 @@ class roomManager {
 		}
 	}
 
-	async addMember(username, room, isAdmin){
+	async addMember(username, roomName){
+		try {
+			if (!this.roomsCollection) {
+				await this.connect();
+				if (!this.roomsCollection) {
+					throw new Error('Failed to initialize room collection');
+				}
+			}
+			const filter = { roomName };
+			const update = { $addToSet: { members: username } };
+			const updateResult = await this.roomsCollection.updateOne(filter, update);
+			
+			if (updateResult.modifiedCount > 0) {
+				console.log('Successfully added user to members')
+			} else if (updateResult.matchedCount > 0) {
+				console.log('User already in a member or other changes not made')
+			} else {
+				console.log('Failed to add member. Room not found.');
+				throw new Error('Failed to add member. Room not found.')
+			}
+		} catch (err) {
+			console.log('Error adding member', err);
+			throw err;
+		}
+	}
 
+	async removeMember(username, roomName){
+		try {
+			if (!this.roomsCollection) {
+				await this.connect();
+				if (!this.roomsCollection) {
+					throw new Error('Failed to initialize room collection');
+				}
+			}
+			const filter = { roomName };
+			const update = { $pull: { members: username } };
+			const updateResult = await this.roomsCollection.updateOne(filter, update);
+			
+			if (updateResult.modifiedCount > 0) {
+				console.log('Successfully removed user to members')
+				return {status: 'success'}
+			} else if (updateResult.matchedCount > 0) {
+				console.log('User doesnt exist in room members')
+			} else {
+				console.log('Failed to remove member. Room not found.');
+				throw new Error('Failed to remove member. Room not found.')
+			}
+		} catch (err) {
+			console.log('Error removing rooms:', err);
+			throw err;
+		}
+	}
+
+	async addAdmin(username, roomName) {
+		try {
+			if (!this.roomsCollection) {
+				await this.connect();
+				if (!this.roomsCollection) {
+					throw new Error('Failed to initialize room collection');
+				}
+			}
+			const filter = { roomName };
+			const update = { $addToSet: { admins: username } };
+			const updateResult = await this.roomsCollection.updateOne(filter, update);
+			
+			if (updateResult.modifiedCount > 0) {
+				console.log('Successfully added user to admin')
+			} else if (updateResult.matchedCount > 0) {
+				console.log('User already in admin or other changes not made')
+			} else {
+				console.log('Failed to add admin. Room not found.');
+				throw new Error('Failed to add admin. Room not found.')
+			}
+		} catch (err) {
+			console.log('Error adding admin:', err);
+			throw err;
+		}
+	}
+
+	async removeAdmin(username, roomName){
+		try {
+			if (!this.roomsCollection) {
+				await this.connect();
+				if (!this.roomsCollection) {
+					throw new Error('Failed to initialize room collection');
+				}
+			}
+			const filter = { roomName };
+			const update = { $pull: { admins: username } };
+			const updateResult = await this.roomsCollection.updateOne(filter, update);
+			
+			if (updateResult.modifiedCount > 0) {
+				console.log('Successfully removed user from admins')
+				return {status: 'success'}
+			} else if (updateResult.matchedCount > 0) {
+				console.log('User doesnt exist in room admins')
+			} else {
+				console.log('Failed to remove admin. Room not found.');
+				throw new Error('Failed to remove admin. Room not found.')
+			}
+		} catch (err) {
+			console.log('Error removing admin:', err);
+			throw err;
+		}
+	}
+
+	async listAdmins(roomName) {
+		try {
+			if (!this.roomsCollection) {
+				await this.connect();
+				if (!this.roomsCollection) {
+					throw new Error('Failed to initialize room collection');
+				}
+			}
+			const room = await this.roomsCollection.findOne({roomName});
+			return room.admin;
+		} catch (err) {
+			console.log('Error listing admins:', err);
+			throw err;
+		}
+	}
+
+	async listMembers(roomName) {
+		try {
+			if (!this.roomsCollection) {
+				await this.connect();
+				if (!this.roomsCollection) {
+					throw new Error('Failed to initialize room collection');
+				}
+			}
+			const room = await this.roomsCollection.findOne({roomName});
+			return room.members;
+		} catch (err) {
+			console.log('Error listing admins:', err);
+			throw err;
+		}
 	}
 
 	async listRooms(){
