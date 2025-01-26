@@ -4,6 +4,7 @@ const socket = io();
 const header = document.querySelector('header')
 const rooms = document.getElementById('rooms')
 const deleteChat = document.getElementById('deleteChat');
+const leave = document.getElementById('leave');
 
 let userName;
 let roomName;
@@ -204,4 +205,14 @@ deleteChat.addEventListener('click', async ()=>{
 	} else {
 		getRoomMessages();
 	}
+})
+
+leave.addEventListener('click', ()=>{
+	fetch(`/api/room/remove-member?roomName=${roomName}`).then(_ => {
+		fetch(`/api/room/remove-session/`).then(_=>{
+			console.log("signed out")
+			socket.emit('disconnecet')
+			window.location.reload();
+		})
+	})
 })

@@ -2,6 +2,15 @@ import roomManage from '../utils/room.js'
 import {writeFileSync} from 'fs'
 
 export default class roomController{
+
+	static async removeSession(req, res) {
+		if(req.session) {
+			req.session.destroy();
+			res.status(200).json({status:1, reason:"successfully deleted session"});
+		} else {
+			res.status(401).json({status:0, reason:"not authorized to delete session"});
+		}
+	}
 	static async createRoom(req, res) {
 		if (req && req.body) {
 			const roomName = req.body.roomName;

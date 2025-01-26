@@ -20,6 +20,7 @@ router.get('/api/room/list-admins/', roomController.listAdmins)
 router.get('/api/room/list-members/', roomController.listMembers)
 router.get('/api/room/list-rooms/', roomController.listRooms)
 router.get('/api/room/room-session/', roomController.setRoom)
+router.get('/api/room/remove-session/', roomController.removeSession)
 // router.get('/getImage', userController.getImage);
 
 //message related endpoints

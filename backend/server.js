@@ -61,6 +61,7 @@ io.on('connection', soc => {
 	soc.on('disconnect', () => {
 		console.log(soc.username, "left", soc.currentRoom)
 		if(soc.currentRoom) {
+			soc.leave(soc.currentRoom);
 			io.to(soc.currentRoom).emit('announcement', soc.username + ' has left the room');
 			soc.currentRoom = null;
 		}
