@@ -65,7 +65,7 @@ class UserManager {
       }
         throw new Error('Failed to create user');
     } catch (error) {
-      console.error('Error adding user:', error);
+      console.error('Error adding user, username already exists');
       throw error;
     }
   }

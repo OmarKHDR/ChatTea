@@ -70,7 +70,7 @@ signupForm.addEventListener('submit', function(event) {
 	const email = document.querySelector('#email').value;
 	const password = document.querySelector('#password').value;
 	const confirmPassword = document.querySelector('#confirm-password').value;
-
+	const userName = document.querySelector('#username').value;
 	// Validate email
 	if (!validateEmail(email)) {
 		alert('Please enter a valid email address');
@@ -84,7 +84,27 @@ signupForm.addEventListener('submit', function(event) {
 	}
 
 	// If all validations pass, submit the form
-	signupForm.submit();
+	fetch('/api/user/submit-signup/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			username: userName,
+			password: password,
+			confirmPassword: confirmPassword,
+			email: email
+		})
+	})
+	.then(response => response.json())
+	.then(data => {
+		console.log(data)
+		if (data.status) {
+			window.location.href = '/home';
+		} else {
+			alert(data.reason);
+		}
+	})
 });
 
 document.querySelectorAll('.toggle-password').forEach(button => {

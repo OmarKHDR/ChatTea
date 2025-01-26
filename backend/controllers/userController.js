@@ -1,3 +1,4 @@
+import { stringify } from 'uuid';
 import userManage from '../utils/user.js';
 
 const noNeedAuth = ['/login','/signup', '/login/', '/signup/']
@@ -23,27 +24,25 @@ export default class userController {
 
 	static signup(req, res) {
 		if (req.session && req.session.user) {
-			return res.redirect('/home')
+			return res.status(200).json({status:1, reason:"successful account creation"})
 		}
 	}
 
 	static async checkUserData(req, res, next) {
 		const user = req.body
 		if(!(user && user.username && user.password && user.confirmPassword && user.email)) {
-			res.send({error: "no sufficient data"})
+			return res.send({status:0,reason: "no sufficient data"})
 		} else {
 			if (user.confirmPassword === user.password){
 				try{
 					await userManage.addUser(user.username, user.password, user.email)
 				} catch(err) {
-					console.log(err)
-					res.send({error: err})
-					return
+					return res.send({status:0, reason: "error while saving user, username already exists" })
 				}
 				req.session.user = {username: user.username}
 				next();
 			} else {
-				return res.send({error: "passwords doesn't match stop bypassing front-end you idiot"})
+				return res.send({status:0, reason: "passwords doesn't match stop bypassing front-end you idiot"})
 			}
 		}
 	}
