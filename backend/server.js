@@ -1,25 +1,27 @@
 import { Server } from "socket.io";
 import { createServer } from "http";
+import "dotenv/config";
 import express from "express";
-import env from 'process';
+import process from 'process';
 import bodyParser from 'body-parser';
 import {v4} from 'uuid'
 import session from 'express-session'
 import router from './routes/index.js'
 import roomManage from "./utils/room.js";
 
-const port = env.SOCKETPORT || 5001;
-const host = env.SOCKETHOST || '0.0.0.0';
+
+const port = process.env.SOCKETPORT || 5001;
+const host = process.env.SOCKETHOST || '0.0.0.0';
 const app = express()
 const httpServer = createServer(app);
 
-if (!env.SECRETKEY) {
-	env.SECRETKEY = v4();
+if (!process.env.SECRETKEY) {
+	process.env.SECRETKEY = v4();
 }
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
-	secret: env.SECRETKEY,
+	secret: process.env.SECRETKEY,
 	resave: false,
 	saveUninitialized: true,
 	cookie: {

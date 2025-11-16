@@ -1,11 +1,10 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient , ServerApiVersion} from 'mongodb';
 import pkg from 'bcryptjs';
-import path from 'path';
 
 const {hash, compare} = pkg;
 
 class UserManager {
-  constructor(dbUrl = 'mongodb://127.0.0.1:27017/', dbName = 'chaiApp') {
+  constructor(dbUrl, dbName) {
     this.dbUrl = dbUrl;
     this.dbName = dbName;
     this.client = null;
@@ -16,7 +15,13 @@ class UserManager {
   async connect() {
     try {
       if (this.usersCollection) return;
-        this.client = new MongoClient(this.dbUrl);
+        this.client = new MongoClient(this.dbUrl, {
+                  serverApi: {
+                  version: ServerApiVersion.v1,
+                  strict: true,
+                  deprecationErrors: true,
+                }
+              });
         await this.client.connect();
         console.log('Connected to MongoDB');
         this.db = this.client.db(this.dbName);
@@ -136,7 +141,7 @@ class UserManager {
   }
 }
 
-import env from 'process';
-const userManage = new UserManager(env.MONGO_URI || 'mongodb://127.0.0.1:27017')
+import process from 'process';
+const userManage = new UserManager(process.env.MONGO_URI, process.env.DBNAME)
 userManage.connect()
 export default userManage

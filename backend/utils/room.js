@@ -1,7 +1,7 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 class roomManager {
-	constructor(dbUrl='mongodb://127.0.0.1:27017', dbName='chaiApp'){
+	constructor(dbUrl, dbName){
 		this.dbUrl = dbUrl;
 		this.dbName = dbName;
 		this.client = null;
@@ -14,7 +14,13 @@ class roomManager {
 			if (this.roomsCollection) {
 				return;
 			}
-			this.client = new MongoClient(this.dbUrl);
+			this.client = new MongoClient(this.dbUrl, {
+					serverApi: {
+					version: ServerApiVersion.v1,
+					strict: true,
+					deprecationErrors: true,
+				}
+			});
 			await this.client.connect();
 			this.db = await this.client.db(this.dbName);
 			// search for room collection
@@ -217,8 +223,8 @@ class roomManager {
 
 }
 
-import env from 'process'
+import process from 'process'
 
-const roomManage = new roomManager(env.MONGO_URI || 'mongodb://127.0.0.1:27017')
+const roomManage = new roomManager(process.env.MONGO_URI, process.env.DBNAME)
 roomManage.connect()
 export default roomManage;

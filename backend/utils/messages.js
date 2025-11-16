@@ -1,7 +1,7 @@
-import { MongoClient,  ObjectId} from "mongodb";
+import { MongoClient,  ObjectId, ServerApiVersion} from "mongodb";
 
 class messageManager{
-	constructor(dburl="mongodb://127.0.0.1:27017", dbName="chaiApp") {
+	constructor(dburl, dbName) {
 		this.dbUrl = dburl;
 		this.dbName = dbName;
 		this.client = null;
@@ -12,7 +12,13 @@ class messageManager{
 	async connect(){
 		try {
 			if (this.messagesCollection) return;
-			this.client = await new MongoClient(this.dbUrl);
+			this.client = await new MongoClient(this.dbUrl, {
+								serverApi: {
+								version: ServerApiVersion.v1,
+								strict: true,
+								deprecationErrors: true,
+							}
+						});
 			this.db = await this.client.db(this.dbName);
 			const collections = await this.db.listCollections().toArray();
 			const exists = collections.some(collection => collection.name === 'Users');
@@ -155,9 +161,9 @@ class messageManager{
 	} 
 }
 
-import env from 'process'
+import process from 'process'
 
-const messageManage = new messageManager(env.MONGO_URI || 'mongodb://127.0.0.1:27017');
+const messageManage = new messageManager(process.env.MONGO_URI, process.env.DBNAME);
 messageManage.connect();
 
 export default messageManage;
