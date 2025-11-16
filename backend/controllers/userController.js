@@ -18,7 +18,7 @@ export default class userController {
 			}
 			return res.redirect('/login')
 		} catch (err) {
-			console.log(err);
+			console.log('err while checking user');
 		}
 	}
 

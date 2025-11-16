@@ -35,7 +35,7 @@ class UserManager {
         }
         this.usersCollection = this.db.collection('Users');
     } catch (error) {
-      console.error('Error connecting to MongoDB:', error);
+      console.error('Error connecting to MongoDB');
       throw error; // Re-throw to be handled by the caller
     }
   }
