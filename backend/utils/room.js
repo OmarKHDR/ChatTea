@@ -11,6 +11,9 @@ class roomManager {
 
 	async connect(){
 		try {
+			if (this.roomsCollection) {
+				return;
+			}
 			this.client = new MongoClient(this.dbUrl);
 			await this.client.connect();
 			this.db = await this.client.db(this.dbName);
@@ -28,32 +31,32 @@ class roomManager {
 	}
 
 	async createRoom(roomName, picture= '../../roomPics/default.jpg', roomDescription="no description", members=[], admins=[]){
-		try{
+		if (!roomName) return false;
+		if (!this.roomsCollection) {
+			await this.connect();
 			if (!this.roomsCollection) {
-				await this.connect();
-				if (!this.roomsCollection) {
-					throw new Error('Failed to initialize room collection');
-				}
+				console.error('Failed to initialize room collection');
+				return false;
 			}
-			const roomExists = await this.roomsCollection.findOne({roomName})
-			if (roomExists) {
-				throw new Error('room already exists, join it instead')
-			}
-			const room = await this.roomsCollection.insertOne({
-				roomName,
-				picture,
-				description: roomDescription,
-				members,
-				admins,
-			})
-			if(room && room.insertedId) {
-				return {message: 'room created successfully', id: room.insertedId};
-			}
-			throw new Error('the room isnt created try again later')
-		} catch(err) {
-			console.log(err, 'couldnt create the room')
-			throw err
 		}
+		const roomExists = await this.roomsCollection.findOne({roomName})
+		if (roomExists) {
+			console.log(`room ${roomName} already exist join it instead`)
+			console.error(`room ${roomName} already exist join it instead`)
+			return false;
+		}
+		const room = await this.roomsCollection.insertOne({
+			roomName,
+			picture,
+			description: roomDescription,
+			members,
+			admins,
+		})
+		if(room && room.insertedId) {
+			return true;
+		}
+		console.error('the room isnt created try again later')
+		return false;
 	}
 
 	async addMember(username, roomName){

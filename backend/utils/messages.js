@@ -11,6 +11,7 @@ class messageManager{
 
 	async connect(){
 		try {
+			if (this.messagesCollection) return;
 			this.client = await new MongoClient(this.dbUrl);
 			this.db = await this.client.db(this.dbName);
 			const collections = await this.db.listCollections().toArray();

@@ -16,8 +16,10 @@ export default class roomController{
 			const roomName = req.body.roomName;
 			const picture = req.body.picture;
 			const description = req.body.description;
+			const username = req.body.admin
+			console.log(roomName, description)
 			let filePath;
-			if (picture && picture.startsWith('data:image') && picture.includes(';base64,')){
+			if (false && picture && picture.startsWith('data:image') && picture.includes(';base64,')){
 				const fileType = picture.split(';')[0].split('/')[1];
 				const base64Data = picture.replace(/^data:image\/\w+;base64,/, '');
 				filePath = `../../roomPics/${roomName}.${fileType}`
@@ -26,11 +28,10 @@ export default class roomController{
 				console.log('no image for the room, using default one')
 				filePath = `../../roomPics/default.jpg`
 			}
-			try {
-				roomManage.createRoom(roomName, filePath, description);
-				return res.send({status: 'success'})
-			} catch(err) {
-				console.log(err, "in creating room")
+			const isCreated = await roomManage.createRoom(roomName, filePath, description,undefined, [username]);
+			if (isCreated) return res.send({status: 'success'})
+			else {
+				console.error(err, "in creating room")
 				return res.send({status: 'fail', error: err});
 			}
 		}

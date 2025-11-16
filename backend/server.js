@@ -6,8 +6,9 @@ import bodyParser from 'body-parser';
 import {v4} from 'uuid'
 import session from 'express-session'
 import router from './routes/index.js'
+import roomManage from "./utils/room.js";
 
-const port = env.SOCKETPORT || 5000;
+const port = env.SOCKETPORT || 5001;
 const host = env.SOCKETHOST || '0.0.0.0';
 const app = express()
 const httpServer = createServer(app);
@@ -18,18 +19,24 @@ if (!env.SECRETKEY) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(session({
-	secret: env.SECRETKEY, // Change this to a secure secret
+	secret: env.SECRETKEY,
 	resave: false,
-	saveUninitialized: true, // Only save session if modified
+	saveUninitialized: true,
 	cookie: {
-		   secure: false, // Set to true in production with https
-		   httpOnly: false, // Helps prevent client-side JS from accessing the cookie
-		   maxAge: 1000 * 60 * 60 * 24 // Session expiration time (1 day)
+			secure: false,
+			httpOnly: false,
+			maxAge: 1000 * 60 * 60 * 24
 		},
 }));
 
 app.use(router);
 app.use(express.static('../frontend'))
+
+roomManage.createRoom("general", undefined,"general topic all starts with it")
+.catch(err => {
+	console.log(err)
+})
+
 
 const io = new Server(httpServer, { cors: { origin: "*" } })
 

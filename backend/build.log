@@ -1,0 +1,2 @@
+time="2025-11-16T12:00:09+02:00" level=warning msg="/home/omark/chatTea/ChatTea/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ chattea-app:latest  Built

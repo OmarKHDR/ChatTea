@@ -250,3 +250,232 @@ button:hover {
 	background-color: #A0522D;
 	box-shadow: 0 3px 7px rgba(0,0,0,0.3);
 }
+
+/* new centered wrapper inside .chat-rooms to place CTA in the middle */
+.chat-rooms .createRoom-wrapper {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 14px 0;
+}
+
+/* simple CTA design matching original style */
+.createRoom,
+#creatRoom,
+#createRoom {
+	display: inline-block;
+	background-color: #8B4513;
+	color: white;
+	padding: 10px 20px;
+	margin: 0 auto;
+	border: 1px solid #DEB887;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
+	position: static !important;
+}
+
+.createRoom:hover,
+#creatRoom:hover,
+#createRoom:hover {
+	background-color: #A0522D;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.createRoom:active,
+#creatRoom:active,
+#createRoom:active {
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* adjust small-screen width to avoid overflow */
+@media (max-width: 420px) {
+	.createRoom,
+	#creatRoom,
+	#createRoom {
+		min-width: 120px;
+		padding: 10px 14px;
+		font-size: 14px;
+	}
+}
+
+/* popup card for creating a new room */
+.createRoomPopUp {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #FFF8DC;
+	border: 2px solid #DEB887;
+	border-radius: 8px;
+	padding: 24px;
+	box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+	z-index: 1000;
+	min-width: 320px;
+	max-width: 420px;
+	animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -55%);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%);
+	}
+}
+
+.createRoomPopUp.active {
+	display: block;
+}
+
+/* close button at top-right of popup */
+.createRoomPopUp .closePopUp {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: none;
+	border: none;
+	color: #8B4513;
+	font-size: 28px;
+	cursor: pointer;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.2s ease;
+	margin: 0;
+}
+
+.createRoomPopUp .closePopUp:hover {
+	color: #A0522D;
+	box-shadow: none;
+}
+
+.createRoomPopUp label {
+	display: block;
+	margin-top: 14px;
+	margin-bottom: 6px;
+	font-weight: bold;
+	color: #8B4513;
+	font-size: 14px;
+}
+
+.createRoomPopUp label:first-of-type {
+	margin-top: 24px;
+}
+
+.createRoomPopUp input[type="text"],
+.createRoomPopUp input[type="file"] {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 14px;
+	border: 1px solid #DEB887;
+	border-radius: 5px;
+	font-size: 14px;
+	box-sizing: border-box;
+	background-color: #FFF8DC;
+	transition: border-color 0.3s ease;
+}
+
+.createRoomPopUp input[type="text"]:focus,
+.createRoomPopUp input[type="file"]:focus {
+	outline: none;
+	border-color: #8B4513;
+	box-shadow: 0 1px 4px rgba(139,69,19,0.2);
+}
+
+/* file input wrapper for clear button */
+.file-input-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin-bottom: 14px;
+}
+
+.file-input-wrapper input[type="file"] {
+	margin-bottom: 0;
+	flex: 1;
+}
+
+/* clear file button - always visible */
+.file-input-wrapper .clearFileBtn {
+	position: absolute;
+	right: 10px;
+	background: none;
+	border: none;
+	color: #8B4513;
+	font-size: 20px;
+	cursor: pointer;
+	padding: 0;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: color 0.2s ease;
+	margin: 0;
+}
+
+.createRoomPopUp input[type="file"]::file-selector-button {
+	background-color: #8B4513;
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: background-color 0.3s ease;
+	margin-right: 8px;
+}
+
+.createRoomPopUp input[type="file"]::file-selector-button:hover {
+	background-color: #A0522D;
+}
+
+/* submit button inside popup */
+.createRoomPopUp button#createRoomRequest {
+	width: 100%;
+	padding: 10px;
+	margin-top: 20px;
+	margin-left: 0;
+	background-color: #8B4513;
+	color: white;
+	border: 1px solid #DEB887;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
+	position: static;
+}
+
+.createRoomPopUp button#createRoomRequest:hover {
+	background-color: #A0522D;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.createRoomPopUp button#createRoomRequest:active {
+	box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* overlay behind popup */
+.createRoomPopUp::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.3);
+	z-index: -1;
+}

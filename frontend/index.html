@@ -16,13 +16,24 @@
 		<div class="side-menu">
 			<img src="logo.png" alt="Chat-Tea Logo" class="logo">
 			<div class="chat-rooms">
+				<button id="createRoom">Create Room</button>
 				<h2>Rooms</h2>
-				<ul id="rooms">	</ul>
+				<ul id="rooms"> </ul>
 				<h2> active users </h2>
 				<ul id="members"></ul>
 				<h2>Admins</h2>
 				<ul id="admins"></ul>
 			</div>
+		</div>
+		<div class="createRoomPopUp">
+			<button id="closeCreatePopUp" class="closePopUp" aria-label="Close">&times;</button>
+			<label for="name">room name</label>
+			<input type="text" id="createRoomName" name="name" />
+			<label for="description">room description</label>
+			<input type="text" id="createRoomDescription" name="description">
+			<button id="createRoomRequest">create</button>
+		</div>
+
 		</div>
 		<div class="chat-container">
 			<div class="chat-messages" id="messageArea">

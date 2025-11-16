@@ -15,6 +15,7 @@ class UserManager {
 
   async connect() {
     try {
+      if (this.usersCollection) return;
         this.client = new MongoClient(this.dbUrl);
         await this.client.connect();
         console.log('Connected to MongoDB');

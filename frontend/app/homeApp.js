@@ -5,6 +5,22 @@ const header = document.querySelector('header')
 const rooms = document.getElementById('rooms')
 const deleteChat = document.getElementById('deleteChat');
 const leave = document.getElementById('leave');
+const createRoom = document.getElementById('createRoom');
+const roomCreationName = document.getElementById('createRoomName');
+const roomCreationDescription = document.getElementById('createRoomDescription');
+
+
+const closePopUp = document.getElementById('closeCreatePopUp');
+const sendRoomCreationRequest = document.getElementById('createRoomRequest')
+
+
+
+closePopUp.addEventListener('click', e=> {
+	document.querySelector('.createRoomPopUp').classList.remove('active')
+})
+createRoom.addEventListener('click', e=> {
+	document.querySelector('.createRoomPopUp').classList.add('active')
+})
 
 let userName;
 let roomName;
@@ -23,7 +39,7 @@ fetch('/api/user/username')
 fetch('/api/room/list-rooms')
 .then(res => res.json())
 .then(res => {
-	// Sort rooms to put General first
+	console.log('rooms list----', res)
 	res.sort((a, b) => {
 		if (a.roomName === 'general') return -1;
 		if (b.roomName === 'general') return 1;
@@ -52,6 +68,39 @@ fetch(`/api/room/room-session?roomName=general`)
 	getRoomMessages(roomName);
 })
 
+sendRoomCreationRequest.addEventListener('click', e=> {
+	console.log(roomCreationName?.value, roomCreationDescription?.value)
+	if (roomCreationName?.value && roomCreationDescription?.value)
+	{
+		fetch('/api/room/create-room/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			picture: undefined,
+			roomName: roomCreationName?.value,
+			description: roomCreationDescription?.value,
+			admin: userName
+			})
+		})
+		.then(res => res.json())
+		.then(res => {
+			if (res.status == 'success') {
+				alert(`room created`)
+			}
+			else {
+				alert('try again later')
+			}
+			roomCreationDescription.value = '';
+			roomCreationName.value= '';
+			closePopUp.click();
+
+		})
+
+	}
+
+})
 rooms.addEventListener
 ('click', (e) => {
 	if (e.target.tagName === 'LI') {
