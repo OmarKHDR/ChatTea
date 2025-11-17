@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import {v4} from 'uuid'
 import session from 'express-session'
 import router from './routes/index.js'
-import roomManage from "./utils/room.js";
+import RoomManager from "./utils/room.js";
 
 
 const port = process.env.SOCKETPORT || 5001;
@@ -34,7 +34,7 @@ app.use(session({
 app.use(router);
 app.use(express.static('./frontend'))
 
-roomManage.createRoom("general", undefined,"general topic all starts with it")
+RoomManager.createRoom("general", undefined,"general topic all starts with it")
 .catch(err => {
 	console.log(err)
 })
@@ -77,6 +77,5 @@ io.on('connection', soc => {
 	})
 })
 
-httpServer.listen(port, host, () => {
-	console.log('socket connection started on',host, port);
-})
+
+export default httpServer;
